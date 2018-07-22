@@ -1,0 +1,140 @@
+<html>
+<head>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/ace.js" type="text/javascript" charset="utf-8"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/theme-dawn.js" type="text/javascript" charset="utf-8"></script>
+  	<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.8/mode-javascript.js" type="text/javascript" charset="utf-8"></script>
+	<script type="module">
+		import MathGraph from './src/math-graph.js';
+
+		window.MathGraph = MathGraph;
+	</script>
+
+  	<style type="text/css">
+  		h1 {
+  			text-transform: uppercase;
+		    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+		    font-weight: 700;
+  		}
+  		.editor-container {
+  			float: left;  			
+  		}
+  		#editor {
+    		width: 500px;
+    		height: 300px;
+    		border: solid 1px #787878;
+		}
+		.console-container {
+			display: inline-block;
+    		width: 40%;
+  			padding-left: 10px;
+  			font-size: 18px;
+		}
+		.clear-icon {
+			margin: 0;
+		    padding: 0;
+		    top: 4px;
+		    position: relative;
+		    cursor: pointer;
+		}
+		#exec-button {
+			width: 100px;
+			height: 30px;
+			margin: 10px;
+		}
+		#console {
+			border: solid 1px #8c8c8c;
+		    padding: 10px;
+		    margin: 4px;
+		    min-height: 200px;
+  			font: 14px/normal 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+			
+		}
+  	</style>
+  </head>
+  <body>
+
+<h1> MathGraph.js example </h1>
+
+<div class="editor-container">
+<div id="editor">
+var graph = MathGraph.createGraph();
+
+var a1 = graph.variable( 0 );
+var a2 = graph.variable( 0 );
+
+var a3 = graph.add( a1, a2 );
+var a4 = graph.sub( a1, a3 );
+
+var result = graph.run({[a1]: 2, [a2]: 3});
+console.log(`$a3 =  ${a1.value} + ${a2.value} ` );
+console.log(`$a3 =  ${a3.value} ` );
+console.log(`$a4 =  ${a1.value} - $a3 ` );
+console.log(`$a4 =  ${a4.value} ` );
+</div>
+<button id=exec-button onClick="onClickExec()">exec</button>
+</div>
+
+<div class="console-container">
+	<div class="console-title">console
+		<span class="clear-icon" onClick="onClickClearConsole()">
+			<svg version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+			 width="18px" height="18px" viewBox="0 0 512 512" style="enable-background:new 0 0 512 512;" xml:space="preserve">
+				<style type="text/css">
+				<![CDATA[
+					.st0{fill:#4B4B4B;}
+				]]>
+				</style>
+				<g>
+					<path class="st0" d="M437.023,74.977c-99.984-99.969-262.063-99.969-362.047,0c-99.969,99.984-99.969,262.063,0,362.047
+						c99.969,99.969,262.078,99.969,362.047,0S536.992,174.945,437.023,74.977z M137.211,137.211
+						c54.391-54.391,137.016-63.453,201.016-27.531L109.68,338.227C73.758,274.227,82.82,191.602,137.211,137.211z M374.805,374.789
+						c-54.391,54.391-137.031,63.469-201.031,27.547l228.563-228.563C438.258,237.773,429.18,320.414,374.805,374.789z"/>
+				</g>
+			</svg>
+		</span>
+	</div>
+	<pre id="console"></pre>
+</div>
+<script>
+    
+	
+	var consoleElement = document.getElementById("console");
+
+    console._log = console.log;
+
+    console.log = function( v ){
+
+    	console._log(v);
+
+		consoleElement.innerHTML += v + '\n' ;
+
+    }; 
+
+    var editor = ace.edit("editor");
+    
+    editor.setTheme("ace/theme/dawn");
+    
+    var JavaScriptMode = ace.require("ace/mode/javascript").Mode;	
+	
+	editor.session.setMode(new JavaScriptMode());
+
+	function onClickExec(){
+		
+		var code = editor.getValue();
+
+		var func = Function(code);
+
+		func();
+	
+	}
+
+	function onClickClearConsole(){
+		consoleElement.innerHTML = "";
+	}
+</script>
+
+</head>
+<body>
+
+</body>
+</html>
